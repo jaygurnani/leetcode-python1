@@ -24,9 +24,29 @@ class Solution:
             result.append(candies[i] + extraCandies >= maxCandies)
         return result
 
+    def maxVowels(self, s: str, k: int) -> int:
+        vowels = {"a", "e", "i", "o", "u"}
+
+        # first k letters
+        count = 0
+        for i in range(k):
+            count = count + int(s[i] in vowels)
+        answer = count
+
+        # go through the rest - start at k, end at len(s)
+        for i in range(k, len(s)):
+            count = count + int(s[i] in vowels)
+            count = count - int(s[i-k] in vowels)
+            answer = max(answer, count)
+
+        return answer
+
 def main():
     sol = Solution()
-    result = sol.KidWithCandiesLeetCode([1,2,3], 1)
+
+    #result = sol.KidWithCandiesLeetCode([1,2,3], 1)
+    result = sol.maxVowels("abciiidef", 3)
+
     print(result)
 
 main()
