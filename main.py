@@ -1,4 +1,6 @@
-from typing import List
+import collections
+from typing import List, Collection
+
 
 class Solution:
     def kidsWithCandies(self, candies: List[int], extraCandies: int) -> List[bool]:
@@ -106,12 +108,41 @@ class Solution:
 
         return right - left +1
 
+    def longestSubarray(self, nums: List[int]) -> int:
+        left, right = 0, 0
+        k = 1
+        for right in range (0, len(nums)):
+            if nums[right] == 0:
+                k -= 1
+            if k < 0:
+                if nums[left] == 0:
+                    k += 1
+                left += 1
+
+        return right - left
+
+    def equalPairs(self, grid: List[List[int]]) -> int:
+        count = 0
+        n = len(grid)
+
+        row_counter = collections.Counter(tuple(row) for row in grid)
+
+        for c in range(n):
+            col = [grid[i][c] for i in range (n)]
+            count = count + row_counter[tuple(col)]
+
+
+        return count
+
+
 def main():
     sol = Solution()
 
     #result = sol.KidWithCandiesLeetCode([1,2,3], 1)
     #result = sol.maxVowels("abciiidef", 3)
-    result = sol.longestOnes([0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], 3)
+    #result = sol.longestOnes([0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], 3)
+    #result = sol.longestSubarray([0,1,1,1,0,1,1,0,1])
+    result = sol.equalPairs([[3,2,1],[1,7,6],[2,7,7]])
 
     print(result)
 
