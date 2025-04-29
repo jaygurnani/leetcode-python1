@@ -2,6 +2,12 @@ import collections
 from typing import List, Collection
 
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
 class Solution:
     def kidsWithCandies(self, candies: List[int], extraCandies: int) -> List[bool]:
         result = [False] * len(candies)
@@ -131,9 +137,41 @@ class Solution:
             col = [grid[i][c] for i in range (n)]
             count = count + row_counter[tuple(col)]
 
-
         return count
 
+    def customSortString(self, order: str, s: str) -> str:
+        result = ""
+        dictionary = {}
+        for char in s:
+            dictionary[char] = dictionary.get(char, 0) + 1
+
+        for char in order:
+            if char in dictionary:
+                result = result + (char * dictionary[char])
+                dictionary.pop(char)
+        for char, count in dictionary.items():
+            result = result + (char * count)
+
+        return result
+
+    def traverseTreeVertical(self, root: TreeNode, column, level, dic):
+        if not root:
+            return
+        dic[column].append((root.val, level))
+        self.traverseTreeVertical(root.left, column -1, level +1, dic)
+        self.traverseTreeVertical(root.right, column +1, level + 1, dic)
+
+    def verticalTraversal(self, root: Optional[TreeNode]) -> List[List[int]]:
+        dict = collections.defaultdict(list)
+        self.traverseTreeVertical(root, 0, 0, dict)
+        result = []
+        for i in sorted(dict.keys()):
+            temp = []
+            for j in sorted(dict[i]):
+                temp.append(j[1])
+            result.append(temp)
+
+        return result
 
 def main():
     sol = Solution()
@@ -142,7 +180,8 @@ def main():
     #result = sol.maxVowels("abciiidef", 3)
     #result = sol.longestOnes([0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], 3)
     #result = sol.longestSubarray([0,1,1,1,0,1,1,0,1])
-    result = sol.equalPairs([[3,2,1],[1,7,6],[2,7,7]])
+    #result = sol.equalPairs([[3,2,1],[1,7,6],[2,7,7]])
+    result = sol.customSortString("cba", "abcd")
 
     print(result)
 
