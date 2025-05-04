@@ -1,5 +1,5 @@
 import collections
-from typing import List, Collection
+from typing import List, Collection, Set, Optional, Dict
 
 
 class TreeNode:
@@ -173,6 +173,24 @@ class Solution:
 
         return result
 
+    def letterCombinations(self, digits: str) -> List[str]:
+        if not digits:
+            return [""]
+        phone_map = ["abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"]
+        output = []
+        self.backtrack("", digits, phone_map, output)
+
+        return output
+
+    def backtrack(self, combination: str, nextDigits: str, phone_map: List[str], output: List[str]):
+        if not nextDigits:
+            output.append(combination)
+        else:
+            check = nextDigits[0]
+            item = phone_map[ord(check) - ord('2')]
+            for letter in item:
+                self.backtrack(combination + letter, nextDigits[1::], phone_map, output)
+
 def main():
     sol = Solution()
 
@@ -181,7 +199,8 @@ def main():
     #result = sol.longestOnes([0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], 3)
     #result = sol.longestSubarray([0,1,1,1,0,1,1,0,1])
     #result = sol.equalPairs([[3,2,1],[1,7,6],[2,7,7]])
-    result = sol.customSortString("cba", "abcd")
+    #result = sol.customSortString("cba", "abcd")
+    result = sol.letterCombinations("23")
 
     print(result)
 
