@@ -1,4 +1,5 @@
 import collections
+import heapq
 from typing import List, Collection, Set, Optional, Dict
 
 
@@ -191,8 +192,57 @@ class Solution:
             for letter in item:
                 self.backtrack(combination + letter, nextDigits[1::], phone_map, output)
 
+    def right_align_text_with_splitting(self, max_width: int, words: List[str]) -> List[str]:
+        lines = []
+        current_line = ""
+
+        for word in words:
+            while word:
+                # if the current line is empty, try and fit it
+                if not current_line:
+                    if len(word) <= max_width:
+                        current_line = word
+                        word = ""
+                    else:
+                        # split it to find the max it can fit
+                        lines.append(word[:max_width].rjust(max_width))
+                        word = word[max_width:]
+                else:
+                    if len(current_line) + 1 + len(word) <= max_width:
+                        current_line += " " + word
+                        word = ""
+                    else:
+                        lines.append(current_line.rjust(max_width))
+                        current_line = ""
+
+        if current_line:
+            lines.append(current_line.rjust(max_width))
+
+        return lines
+
+
+class SmallestInfiniteSet:
+    def __init__(self):
+        self.pq = []
+        self.seen = set()
+        self.min_num = 1
+
+    def popSmallest(self) -> int:
+        if self.pq:
+            num = heapq.heappop(self.pq)
+            self.seen.remove(num)
+            return num
+        self.min_num += 1
+        return self.min_num - 1
+
+    def addBack(self, num: int) -> None:
+        if self.min_num > num and num not in self.seen:
+            self.seen.add(num)
+            heapq.heappush(self.pq, num)
+
 def main():
     sol = Solution()
+    sol1 = SmallestInfiniteSet()
 
     #result = sol.KidWithCandiesLeetCode([1,2,3], 1)
     #result = sol.maxVowels("abciiidef", 3)
@@ -200,7 +250,9 @@ def main():
     #result = sol.longestSubarray([0,1,1,1,0,1,1,0,1])
     #result = sol.equalPairs([[3,2,1],[1,7,6],[2,7,7]])
     #result = sol.customSortString("cba", "abcd")
-    result = sol.letterCombinations("23")
+    #result = sol.letterCombinations("23")
+    #result = sol1.popSmallest()
+    result = sol.right_align_text_with_splitting(20, ["HackerRank123456789101112131415", "is", "a", "great", "place", "to", "learn", "coding", "and", "it", "provides", "many", "challenging", "problems."])
 
     print(result)
 
