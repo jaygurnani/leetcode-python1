@@ -193,7 +193,7 @@ class Solution:
                 self.backtrack(combination + letter, nextDigits[1::], phone_map, output)
 
     def right_align_text_with_splitting(self, max_width: int, words: List[str]) -> List[str]:
-        lines = []
+        lines: List[str] = []
         current_line = ""
 
         for word in words:
@@ -219,6 +219,22 @@ class Solution:
             lines.append(current_line.rjust(max_width))
 
         return lines
+
+    def sum_of_interval_products(self, arr):
+        MOD = 10 ** 9 + 7
+        n = len(arr)
+        total_sum = 0
+
+        # Iterate over all possible starting points
+        for i in range(n):
+            product = 1
+            for j in range(i, n):
+                # Calculate the product for the current interval
+                product = (product * arr[j]) % MOD
+                # Add this product to the total sum
+                total_sum = (total_sum + product) % MOD
+
+        return total_sum
 
 
 class SmallestInfiniteSet:
@@ -252,7 +268,8 @@ def main():
     #result = sol.customSortString("cba", "abcd")
     #result = sol.letterCombinations("23")
     #result = sol1.popSmallest()
-    result = sol.right_align_text_with_splitting(20, ["HackerRank123456789101112131415", "is", "a", "great", "place", "to", "learn", "coding", "and", "it", "provides", "many", "challenging", "problems."])
+    #result = sol.right_align_text_with_splitting(20, ["HackerRank123456789101112131415", "is", "a", "great", "place", "to", "learn", "coding", "and", "it", "provides", "many", "challenging", "problems."])
+    result = sol.sum_of_interval_products([1,2,3])
 
     print(result)
 
